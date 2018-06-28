@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 
 #archive to daum
 cd /etc/apt
@@ -26,7 +26,7 @@ sudo apt-get install git-core
 #vimrc setting
 git clone https://github.com/ksy9164/MyUtil.git
 cd MyUtill
-mv .vimrc ~
+cp .vimrc ~
 cd ~
 
 #goldendict
@@ -47,9 +47,6 @@ sudo apt-get install plank # you can setup plank at ->  $plank --preferences
 
 #twaek tool
 sudo apt-get install gnome-tweak-tool
-
-#plank setup
-plank --preferences
 
 #Numix theme
 sudo add-apt-repository ppa:numix/ppa
