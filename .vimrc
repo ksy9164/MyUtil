@@ -23,7 +23,33 @@ set tabstop=4
 set ruler " 현재 커서 위치 표시
 set incsearch
 set statusline=\ %<%l:%v\ [%P]%=%a\ %h%m%r\ %F\
- 
+set tags=./tags,/usr/src/linux/tags,/usr/include/tags
+set cst
+set csto=0
+
+
+
+if filereadable("./cscope.out")
+	cs add ./cscope.out
+else
+	cs add ~/cscope.out
+endif
+
+function! LoadCscope()
+  let db = findfile("cscope.out", ".;")
+  if (!empty(db))
+    let path = strpart(db, 0, match(db, "/cscope.out$"))
+    set nocscopeverbose " suppress 'duplicate connection' error
+    exe "cs add " . db . " " . path
+    set cscopeverbose
+  " else add the database pointed to by environment variable 
+  elseif $CSCOPE_DB != "" 
+    cs add $CSCOPE_DB
+  endif
+endfunction
+au BufEnter /* call LoadCscope()
+
+
 	if has("syntax")
 	syntax on
 	endif
@@ -37,7 +63,7 @@ set statusline=\ %<%l:%v\ [%P]%=%a\ %h%m%r\ %F\
  
 	let Tlist_Use_Right_Window=1
  
-	map <F5> :BufExplorer<CR>
+"	map <F5> :BufExplorer<CR>
  
  
 	map ,1 :b!1<CR>
@@ -64,7 +90,7 @@ set statusline=\ %<%l:%v\ [%P]%=%a\ %h%m%r\ %F\
 	"--------------"
 	"ctags database path
 	"--------------"
-	set tags=./tags,tags;/
+	"set tags=./tags,tags;/
  
 	"---------------------"
 	"cscope database path"
@@ -88,15 +114,19 @@ set statusline=\ %<%l:%v\ [%P]%=%a\ %h%m%r\ %F\
 	"Tag list Configuration
 	"-----------------------
 	filetype on
-	nmap <F7> :TlistToggle<CR>
-	let Tlist_Ctags_Cmd = '/usr/bin/ctags'
+	nmap <F9> :TlistToggle<CR>
+	"let Tlist_Ctags_Cmd = '/usr/bin/ctags'
 	let Tlist_Inc_Winwidth = 0
-	let Tlist_Exit_OnlyWindow = 0
+	let Tlist_Exit_OnlyWindow = 1
  
-	let Tlist_Auto_Open = 0
+	let Tlist_Display_Tag_Scope = 1
+	
+	let Tlist_Auto_Open = 1
 	let Tlist_Use_Right_Window = 1
- 
-	nmap <F8> :SrcExplToggle<CR>
+	
+	"let Tlist_WinWidth = 35
+
+"	nmap <F8> :SrcExplToggle<CR>
 	nmap <C-H> <C-W>h
 	nmap <C-J> <C-W>j
 	nmap <C-K> <C-W>k
@@ -113,30 +143,30 @@ set statusline=\ %<%l:%v\ [%P]%=%a\ %h%m%r\ %F\
 	"-------------------------------
  
 	let NERDTreeWinPos = 'left'
-	nmap <F9> :NERDTreeToggle<CR>
- 
-	if exists('loaded_trailing_whitespace_plugin') | finish | endif
-	let loaded_trailing_whitespace_plugin = 1
- 
-	if !exists('g:extra_whitespace_ignored_filetypes')
-	let g:extra_whitespace_ignored_filetypes = []
-	endif
- 
-function! ShouldMatchWhitespace()
-	for ft in g:extra_whitespace_ignored_filetypes
-	if ft ==# &filetype | return 0 | endif
-	endfor
-	return 1
-	endfunction
- 
-	function! s:FixWhitespace(line1,line2)
-	let l:save_cursor = getpos(".")
-	silent! execute ':' . a:line1 . ',' . a:line2 . 's/\s\+$//'
-	call setpos('.', l:save_cursor)
-	endfunction
- 
-	" Run :FixWhitespace to remove end of line white space
-command! -range=% FixWhitespace call <SID>FixWhitespace(<line1>,<line2>)
+	nmap <F7> :NERDTreeToggle<CR>
+"	if exists('loaded_trailing_whitespace_plugin') | finish | endif
+"	let loaded_trailing_whitespace_plugin = 1
+"
+"	if !exists('g:extra_whitespace_ignored_filetypes')
+"	let g:extra_whitespace_ignored_filetypes = []
+"	endif
+"
+"function! ShouldMatchWhitespace()
+"	for ft in g:extra_whitespace_ignored_filetypes
+"	if ft ==# &filetype | return 0 | endif
+"	endfor
+"	return 1
+"	endfunction
+"
+"
+"	function! s:FixWhitespace(line1,line2)
+"	let l:save_cursor = getpos(".")
+"	silent! execute ':' . a:line1 . ',' . a:line2 . 's/\s\+$//'
+"	call setpos('.', l:save_cursor)
+"	endfunction
+" 
+"	" Run :FixWhitespace to remove end of line white space
+"command! -range=% FixWhitespace call <SID>FixWhitespace(<line1>,<line2>)
  
 	"============== CSCOPE ==============
  
@@ -227,3 +257,49 @@ set encoding=utf-8
 set fileencodings=utf-8,cp949
 au BufNewFile,BufRead *.cu set ft=cuda
 au BufNewFile,BufRead *.cuh set ft=cuda
+
+set nocompatible              " be iMproved, required
+filetype off                  " required
+set nocompatible              " be iMproved, required
+filetype off                  " required
+
+
+let g:autoclose_vim_commentmode = 1
+
+" 버퍼 목록 켜기
+let g:airline#extensions#tabline#enabled = 1
+
+" 파일명만 출력
+let g:airline#extensions#tabline#fnamemod = ':t'
+
+let g:airline#extensions#tabline#buffer_nr_format = '%s:' " buffer number format
+set hidden
+"nnoremap <C-S-t> :enew<Enter>         " 새로운 버퍼를 연다
+nnoremap <F5> :bprevious!<Enter>    " 이전 버퍼로 이동
+nnoremap <F6> :bnext!<Enter>        " 다음 버퍼로 이동
+nnoremap <F8> :bp <BAR> bd #<Enter> " 현재 버퍼를 닫고 이전 버퍼로 이동
+" 모든 버퍼와 각 버퍼 상태 출력
+nmap <leader>bl :ls<CR>
+let g:airline#extensions#tabline#buffer_nr_show = 1       " buffer number를 보여준다
+
+" set the runtime path to include Vundle and initialize
+set rtp+=~/.vim/bundle/Vundle.vim
+
+call vundle#begin()
+
+" let Vundle manage Vundle, required
+Plugin 'VundleVim/Vundle.vim'
+" vim-airline
+Plugin 'vim-airline/vim-airline'
+" AutoClose
+Plugin 'AutoClose' 
+"taglist
+Plugin 'taglist-plus'
+"Nerd Tree
+Plugin 'The-NERD-Tree'
+"Cscope
+Plugin 'ronakg/quickr-cscope.vim'
+
+call vundle#end()            " required
+
+filetype plugin indent on    " required 

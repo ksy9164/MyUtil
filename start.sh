@@ -23,6 +23,9 @@ sudo dpkg -i google-chrome-stable_current_amd64.deb #google chrome
 #git
 sudo apt-get install git-core
 
+#Vim bundle
+git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+
 #vimrc setting
 git clone https://github.com/ksy9164/MyUtil.git
 cd MyUtill
@@ -53,3 +56,8 @@ sudo add-apt-repository ppa:numix/ppa
 sudo apt-get update
 sudo apt-get install numix-* # you can setup theme at Tweak Tool
 
+#cmake
+sudo apt install cmake
+
+#ddd install
+sudo apt install ddd
