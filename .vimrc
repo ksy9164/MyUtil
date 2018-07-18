@@ -126,7 +126,6 @@ au BufEnter /* call LoadCscope()
 	
 	"let Tlist_WinWidth = 35
 
-"	nmap <F8> :SrcExplToggle<CR>
 	nmap <C-H> <C-W>h
 	nmap <C-J> <C-W>j
 	nmap <C-K> <C-W>k
@@ -286,7 +285,6 @@ let g:airline#extensions#tabline#buffer_nr_show = 1       " buffer number를 보
 set rtp+=~/.vim/bundle/Vundle.vim
 
 call vundle#begin()
-
 " let Vundle manage Vundle, required
 Plugin 'VundleVim/Vundle.vim'
 " vim-airline
@@ -299,7 +297,11 @@ Plugin 'taglist-plus'
 Plugin 'The-NERD-Tree'
 "Cscope
 Plugin 'ronakg/quickr-cscope.vim'
+"Syntastic
+Plugin 'scrooloose/syntastic'
 
 call vundle#end()            " required
 
 filetype plugin indent on    " required 
+
+syntax on

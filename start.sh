@@ -28,9 +28,7 @@ git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 
 #vimrc setting
 git clone https://github.com/ksy9164/MyUtil.git
-cd MyUtill
-cp .vimrc ~
-cd ~
+cp ./MyUtil/.vimrc ~/
 
 #goldendict
 sudo apt-get install goldendict
@@ -46,7 +44,9 @@ sudo apt install htop
 sudo apt-get install tig
 
 #plank
-sudo apt-get install plank # you can setup plank at ->  $plank --preferences
+sudo apt-get install plank 
+# you can setup plank at ->  
+#$plank --preferences
 
 #twaek tool
 sudo apt-get install gnome-tweak-tool
