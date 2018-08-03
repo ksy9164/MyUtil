@@ -7,6 +7,24 @@ sudo sed -i 's/kr.archive.ubuntu.com/ftp.daum.net/g' sources.list
 sudo apt-get update
 cd ~
 
+#bashrc setting
+echo "alias c='clear'">>~/.bashrc
+echo "alias ..='cd ..'">>~/.bashrc
+echo "alias ..2='cd ../..'">>~/.bashrc
+echo "alias ..3='cd ../../..'">>~/.bashrc
+echo "alias ..4='cd ../../../..'">>~/.bashrc
+echo "alias ..5='cd ../../../../..'">>~/.bashrc
+echo "">>~/.bashrc
+echo "function whos { grep -R --color=auto -n --exclude-dir=".git" --exclude tags --exclude cscope.* -e "$1" .; }">>~/.bashrc
+echo "# no binary files">>~/.bashrc
+echo "function whosnb { grep -R -I --color=auto -n --exclude-dir=".git" --exclude tags --exclude cscope.* -e "$1" .; }">>~/.bashrc
+echo "# alias whos='grep -R --color=auto -n -e '$1' .'">>~/.bashrc
+echo "">>~/.bashrc
+echo "alias whos='whos'">>~/.bashrc
+echo "alias whosnb='whosnb'">>~/.bashrc
+echo "alias where='find . -name'">>~/.bashrc
+echo "alias gr='grep -Rnif - . <<<'">>~/.bashrc
+
 sudo apt-get update
 
 #vi
@@ -61,3 +79,7 @@ sudo apt install cmake
 
 #ddd install
 sudo apt install ddd
+
+#tmux
+sudo apt-get install tmux
+
