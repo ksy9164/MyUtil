@@ -24,7 +24,7 @@ echo "alias whos='whos'">>~/.bashrc
 echo "alias whosnb='whosnb'">>~/.bashrc
 echo "alias where='find . -name'">>~/.bashrc
 echo "alias gr='grep -Rnif - . <<<'">>~/.bashrc
-
+echo "export TERM="xterm-256color"">>~/.bashrc
 sudo apt-get update
 
 #vi

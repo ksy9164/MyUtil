@@ -299,9 +299,18 @@ Plugin 'The-NERD-Tree'
 Plugin 'ronakg/quickr-cscope.vim'
 "Syntastic
 Plugin 'scrooloose/syntastic'
+"Git Gutter
+Plugin 'airblade/vim-gitgutter'
+"Git wrapping
+Plugin 'tpope/vim-fugitive'
+"High writing
+Plugin 'kchmck/vim-coffee-script'
+
 
 call vundle#end()            " required
 
 filetype plugin indent on    " required 
 
 syntax on
+set mouse=n
+set ttymouse=xterm2
