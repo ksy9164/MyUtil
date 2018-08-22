@@ -306,10 +306,15 @@ Plugin 'tpope/vim-fugitive'
 "High writing
 Plugin 'kchmck/vim-coffee-script'
 
-
 call vundle#end()            " required
 
 filetype plugin indent on    " required 
+" Uncomment the following to have Vim jump to the last position when
+" reopening a file
+
+if has("autocmd")
+  au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+    endif
 
 syntax on
 set mouse=n
