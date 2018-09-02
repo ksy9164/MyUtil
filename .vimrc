@@ -12,7 +12,6 @@ set cindent " C언어 자동 들여쓰기
 set bs=eol,start,indent
 set history=256
 set laststatus=2 " 상태바 표시 항상
-set paste " 붙여넣기 계단현상 없애기
 set shiftwidth=4 " 자동 들여쓰기 너비 설정
 set showmatch " 일치하는 괄호 하이라이팅
 set smartcase " 검색시 대소문자 구별
@@ -26,8 +25,6 @@ set statusline=\ %<%l:%v\ [%P]%=%a\ %h%m%r\ %F\
 set tags=./tags,/usr/src/linux/tags,/usr/include/tags
 set cst
 set csto=0
-
-
 
 if filereadable("./cscope.out")
 	cs add ./cscope.out
@@ -140,33 +137,24 @@ au BufEnter /* call LoadCscope()
 	"-------------------------------
 	"NERD Tree Configuration Setting
 	"-------------------------------
- 
+	
 	let NERDTreeWinPos = 'left'
 	nmap <F7> :NERDTreeToggle<CR>
-"	if exists('loaded_trailing_whitespace_plugin') | finish | endif
-"	let loaded_trailing_whitespace_plugin = 1
-"
-"	if !exists('g:extra_whitespace_ignored_filetypes')
-"	let g:extra_whitespace_ignored_filetypes = []
-"	endif
-"
-"function! ShouldMatchWhitespace()
-"	for ft in g:extra_whitespace_ignored_filetypes
-"	if ft ==# &filetype | return 0 | endif
-"	endfor
-"	return 1
-"	endfunction
-"
-"
-"	function! s:FixWhitespace(line1,line2)
-"	let l:save_cursor = getpos(".")
-"	silent! execute ':' . a:line1 . ',' . a:line2 . 's/\s\+$//'
-"	call setpos('.', l:save_cursor)
-"	endfunction
-" 
-"	" Run :FixWhitespace to remove end of line white space
-"command! -range=% FixWhitespace call <SID>FixWhitespace(<line1>,<line2>)
- 
+	"NERD Tree Auto open
+	autocmd VimEnter * NERDTree | wincmd p
+	"NERD Tree and TagList Auto close
+	fun! NoExcitingBuffersLeft()
+	   if tabpagenr("$") == 1 && winnr("$") == 2
+		  let window1 = bufname(winbufnr(1))
+		  let window2 = bufname(winbufnr(2))
+		  if (window1 == t:NERDTreeBufName || window1 == "__Tag_List__") && (window2 == t:NERDTreeBufName || window2 == "__Tag_List__")
+			quit
+			quit
+		  endif
+	   endif
+	endfun
+	au WinEnter * call NoExcitingBuffersLeft()
+	
 	"============== CSCOPE ==============
  
 func! Sts()
@@ -281,6 +269,10 @@ nnoremap <F8> :bp <BAR> bd #<Enter> " 현재 버퍼를 닫고 이전 버퍼로 �
 nmap <leader>bl :ls<CR>
 let g:airline#extensions#tabline#buffer_nr_show = 1       " buffer number를 보여준다
 
+" Vundle
+set nocompatible              " be iMproved, required
+filetype off                  " required
+
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
 
@@ -305,6 +297,9 @@ Plugin 'airblade/vim-gitgutter'
 Plugin 'tpope/vim-fugitive'
 "High writing
 Plugin 'kchmck/vim-coffee-script'
+"Auto make
+Plugin 'SirVer/ultisnips'
+Plugin 'honza/vim-snippets'
 
 call vundle#end()            " required
 
@@ -317,11 +312,22 @@ if has("autocmd")
     endif
 
 syntax on
+" Syntastic
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+ 
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+
+let g:syntastic_loc_list_height=5 
+let g:syntastic_cpp_compiler = 'g++'
+let g:syntastic_cpp_compiler_options = "-std=c++11 -Wall -Wextra -Wpedantic"
+let g:syntastic_c_compiler_options = "-std=c11 -Wall -Wextra -Wpedantic"
+nnoremap <F10> :SyntasticCheck<CR> :SyntasticToggleMode<CR> :w<CR>
+
 set mouse=n
 set ttymouse=xterm2
 
-" Uncomment the following to have Vim jump to the last position when
-" reopening a file
-if has("autocmd")
-  au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
-endif
