@@ -12,13 +12,13 @@ set cindent " C언어 자동 들여쓰기
 set bs=eol,start,indent
 set history=256
 set laststatus=2 " 상태바 표시 항상
-set shiftwidth=4 " 자동 들여쓰기 너비 설정
+set shiftwidth=8 " 자동 들여쓰기 너비 설정
 set showmatch " 일치하는 괄호 하이라이팅
 set smartcase " 검색시 대소문자 구별
 set smarttab
 set smartindent
-set softtabstop=4
-set tabstop=4
+set softtabstop=8
+set tabstop=8
 set ruler " 현재 커서 위치 표시
 set incsearch
 set statusline=\ %<%l:%v\ [%P]%=%a\ %h%m%r\ %F\
@@ -142,6 +142,7 @@ au BufEnter /* call LoadCscope()
 	nmap <F7> :NERDTreeToggle<CR>
 	"NERD Tree Auto open
 	autocmd VimEnter * NERDTree | wincmd p
+	
 	"NERD Tree and TagList Auto close
 	fun! NoExcitingBuffersLeft()
 	   if tabpagenr("$") == 1 && winnr("$") == 2
@@ -154,7 +155,21 @@ au BufEnter /* call LoadCscope()
 	   endif
 	endfun
 	au WinEnter * call NoExcitingBuffersLeft()
-	
+
+	"auto close only NERD Tree"
+	function! s:CloseIfOnlyControlWinLeft()
+	  if winnr("$") != 1
+		return
+	  endif
+	  if (exists("t:NERDTreeBufName") && bufwinnr(t:NERDTreeBufName) != -1)
+			\ || &buftype == 'quickfix'
+		q
+	  endif
+	endfunction
+	augroup CloseIfOnlyControlWinLeft
+	  au!
+	  au BufEnter * call s:CloseIfOnlyControlWinLeft()
+	augroup END
 	"============== CSCOPE ==============
  
 func! Sts()
@@ -300,7 +315,7 @@ Plugin 'kchmck/vim-coffee-script'
 "Auto make
 Plugin 'SirVer/ultisnips'
 Plugin 'honza/vim-snippets'
-
+Plugin 'scrooloose/nerdcommenter'
 call vundle#end()            " required
 
 filetype plugin indent on    " required 
@@ -312,6 +327,7 @@ if has("autocmd")
     endif
 
 syntax on
+
 " Syntastic
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
@@ -330,4 +346,23 @@ nnoremap <F10> :SyntasticCheck<CR> :SyntasticToggleMode<CR> :w<CR>
 
 set mouse=n
 set ttymouse=xterm2
+
+" NERD Commenter
+" Add spaces after comment delimiters by default
+let g:NERDSpaceDelims = 1
+" Use compact syntax for prettified multi-line comments
+let g:NERDCompactSexyComs = 1
+" Align line-wise comment delimiters flush left instead of following code indentation
+let g:NERDDefaultAlign = 'left'
+" Set a language to use its alternate delimiters by default
+let g:NERDAltDelims_java = 1
+" Add your own custom formats or override the defaults
+let g:NERDCustomDelimiters = { 'c': { 'left': '/**','right': '*/' } }
+" Allow commenting and inverting empty lines (useful when commenting a region)
+let g:NERDCommentEmptyLines = 1
+" Enable trimming of trailing whitespace when uncommenting
+let g:NERDTrimTrailingWhitespace = 1
+" customize keymapping
+map <Leader>cc <plug>NERDComToggleComment
+map <Leader>c<space> <plug>NERDComComment
 
