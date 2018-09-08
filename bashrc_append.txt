@@ -1,0 +1,50 @@
+alias c='clear'
+alias ..='cd ..'
+alias ..2='cd ../..'
+alias ..3='cd ../../..'
+alias ..4='cd ../../../..'
+alias ..5='cd ../../../../..'
+
+function whos { grep -R --color=auto -n --exclude-dir=.git --exclude tags --exclude cscope.* -e  .; }
+# no binary files
+function whosnb { grep -R -I --color=auto -n --exclude-dir=.git --exclude tags --exclude cscope.* -e  .; }
+# alias whos='grep -R --color=auto -n -e '' .'
+
+alias whos='whos'
+alias whosnb='whosnb'
+alias where='find . -name'
+alias gr='grep -Rnif - . <<<'
+export TERM="xterm-256color"
+
+#for tmux&vi setting
+vv(){
+ local file_name=$@
+
+ #create session
+ tmux new-session -s sean -n 'sean' -d
+ 
+ tmux splitw -v -p 50 -t 0
+ tmux splitw -h -p 50 -t 1
+ tmux resize-pane -t 1 -y 11
+ tmux resize-pane -t 1 -x 120
+ tmux send-keys -t 2 "htop" C-j
+ tmux send-keys -t 0 "vi $file_name" C-j
+ tmux select-pane -t 1
+ tmux select-pane -t 0
+
+ tmux attach -t sean
+}
+export PAGER="most"
+
+# Have less display colours
+export LESS_TERMCAP_mb=$'\e[1;31m'     # begin bold
+export LESS_TERMCAP_md=$'\e[1;33m'     # begin blink
+export LESS_TERMCAP_so=$'\e[01;44;37m' # begin reverse video
+export LESS_TERMCAP_us=$'\e[01;37m'    # begin underline
+export LESS_TERMCAP_me=$'\e[0m'        # reset bold/blink
+export LESS_TERMCAP_se=$'\e[0m'        # reset reverse video
+export LESS_TERMCAP_ue=$'\e[0m'        # reset underline
+export GROFF_NO_SGR=1                  # for konsole and gnome-terminal
+
+export MANPAGER='less -s -M +Gg'
+

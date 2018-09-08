@@ -12,13 +12,13 @@ set cindent " C언어 자동 들여쓰기
 set bs=eol,start,indent
 set history=256
 set laststatus=2 " 상태바 표시 항상
-set shiftwidth=8 " 자동 들여쓰기 너비 설정
+set shiftwidth=4 " 자동 들여쓰기 너비 설정
 set showmatch " 일치하는 괄호 하이라이팅
 set smartcase " 검색시 대소문자 구별
 set smarttab
 set smartindent
-set softtabstop=8
-set tabstop=8
+set softtabstop=4
+set tabstop=4
 set ruler " 현재 커서 위치 표시
 set incsearch
 set statusline=\ %<%l:%v\ [%P]%=%a\ %h%m%r\ %F\
@@ -186,7 +186,6 @@ func! Tj()
  
 func! Css()
 	let css = expand("<cword>")
-	new
 	exe "cs find s ".css
 	if getline(1)==" "
 	exe "q!"
@@ -196,7 +195,6 @@ func! Css()
  
 func! Csd()
 	let csd = expand("<cword>")
-	new
 	exe "cs find d ".csd
 	if getline(1)==" "
 	exe "q!"
@@ -206,7 +204,6 @@ func! Csd()
  
 func! Csc()
 	let csc = expand("<cword>")
-	new
 	exe "cs find c ".csc
 	if getline(1)==" "
 	exe "q!"
@@ -216,7 +213,6 @@ func! Csc()
  
 func! Csg()
 	let csg = expand("<cword>")
-	new
 	exe "cs find g ".csg
 	if getline(1)==" "
 	exe "q!"
@@ -230,6 +226,11 @@ func! Man()
 	endfunc
 	nmap    ,ma :call Man()<cr>
  
+func! CPMan()
+	let sm = expand("<cword>")
+	exe "!man -S 2:3:4:5:6:7:8:9:tc1:n:l:p:o std::".sm
+	endfunc
+	nmap    ,k :call CPMan()<cr>
 	"============== 주석 매크로 ==============
  
 	func! CmtOn()    "주석 on
