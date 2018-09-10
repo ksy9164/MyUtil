@@ -26,6 +26,10 @@ set tags=./tags,/usr/src/linux/tags,/usr/include/tags
 set cst
 set csto=0
 
+"C, C++ Linux coding style
+autocmd FileType c setlocal ts=8 sw=8 shiftwidth=8 softtabstop=8 tabstop=8
+autocmd FileType cpp setlocal ts=8 sw=8 shiftwidth=8 softtabstop=8 tabstop=8
+
 if filereadable("./cscope.out")
 	cs add ./cscope.out
 else
@@ -297,8 +301,6 @@ call vundle#begin()
 Plugin 'VundleVim/Vundle.vim'
 " vim-airline
 Plugin 'vim-airline/vim-airline'
-" AutoClose
-Plugin 'AutoClose' 
 "taglist
 Plugin 'taglist-plus'
 "Nerd Tree
