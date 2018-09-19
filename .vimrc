@@ -17,6 +17,7 @@ set showmatch " 일치하는 괄호 하이라이팅
 set smartcase " 검색시 대소문자 구별
 set smarttab
 set smartindent
+set expandtab
 set softtabstop=4
 set tabstop=4
 set ruler " 현재 커서 위치 표시
@@ -27,8 +28,8 @@ set cst
 set csto=0
 
 "C, C++ Linux coding style
-autocmd FileType c setlocal ts=8 sw=8 shiftwidth=8 softtabstop=8 tabstop=8
-autocmd FileType cpp setlocal ts=8 sw=8 shiftwidth=8 softtabstop=8 tabstop=8
+autocmd FileType c setlocal ts=8  shiftwidth=8 softtabstop=8 tabstop=8
+autocmd FileType cpp setlocal ts=8  shiftwidth=8 softtabstop=8 tabstop=8
 
 if filereadable("./cscope.out")
 	cs add ./cscope.out
@@ -267,8 +268,6 @@ au BufNewFile,BufRead *.cuh set ft=cuda
 
 set nocompatible              " be iMproved, required
 filetype off                  " required
-set nocompatible              " be iMproved, required
-filetype off                  " required
 
 
 let g:autoclose_vim_commentmode = 1
@@ -289,7 +288,7 @@ nnoremap <F8> :bp <BAR> bd #<Enter> " 현재 버퍼를 닫고 이전 버퍼로 �
 nmap <leader>bl :ls<CR>
 let g:airline#extensions#tabline#buffer_nr_show = 1       " buffer number를 보여준다
 
-" Vundle
+"Vundle
 set nocompatible              " be iMproved, required
 filetype off                  " required
 
@@ -318,12 +317,15 @@ Plugin 'kchmck/vim-coffee-script'
 "Auto make
 Plugin 'SirVer/ultisnips'
 Plugin 'honza/vim-snippets'
+"Commenter
 Plugin 'scrooloose/nerdcommenter'
+"GDB
+Plugin 'cyrus-and/gdb-dashboard'
+"TMUX
+Plugin 'christoomey/vim-tmux-navigator'
 call vundle#end()            " required
 
-filetype plugin indent on    " required 
-" Uncomment the following to have Vim jump to the last position when
-" reopening a file
+filetype plugin indent on    " required
 
 if has("autocmd")
   au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif

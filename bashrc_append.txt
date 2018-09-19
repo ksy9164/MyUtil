@@ -23,19 +23,79 @@ vv(){
  #create session
  tmux new-session -s sean -n 'sean' -d
  
+ tmux splitw -h -p 5 -t 0
  tmux splitw -v -p 50 -t 0
- tmux splitw -h -p 50 -t 1
- tmux resize-pane -t 1 -y 11
- tmux resize-pane -t 1 -x 120
- tmux send-keys -t 2 "htop" C-j
+ tmux splitw -h -p 50 -t 2
+ tmux resize-pane -t 2 -y 11
+ tmux resize-pane -t 2 -x 115
+ tmux send-keys -t 3 "htop" C-j
  tmux send-keys -t 0 "vi $file_name" C-j
- tmux select-pane -t 1
+ tmux select-pane -t 2
  tmux select-pane -t 0
 
  tmux attach -t sean
 }
-export PAGER="most"
 
+gd(){
+ local file_name=$@
+ tmux resize-pane -t 1 -x 115
+ tmux splitw -v -p 30 -t 1 #2
+ tmux select-pane -t 1
+ tmux splitw -v -p 70 -t 1 #6
+ 
+ tmux select-pane -t 2
+ tmux splitw -h -p 50 -t 2 #3
+ tmux select-pane -t 3
+ tmux splitw -v -p 25 -t 3 #4
+ tmux select-pane -t 3
+ tmux splitw -v -p 25 -t 3 #5
+
+ tmux select-pane -t 6
+ tmux splitw -h -p 47 -t 6 #7
+
+ #source pain
+ tmux send-keys -t 1 "TA" C-j
+ tmux send-keys -t 2 "TB" C-j
+ tmux send-keys -t 3 "TC" C-j
+ tmux send-keys -t 4 "TD" C-j
+ tmux send-keys -t 5 "TE" C-j
+ tmux send-keys -t 7 "TF" C-j
+ 
+ tmux send-keys -t 6 "gdb $file_name" C-j
+ tmux select-pane -t 6
+}
+
+TA(){
+    a=$("tty")
+    echo "dashboard source -output $a" > lange.txt
+    clear
+}
+TB(){
+    b=$("tty")
+    echo "dashboard local_variables -output $b" >> lange.txt
+    clear
+}
+TC(){
+    c=$("tty")
+    echo "dashboard watch_points -output $c" >> lange.txt
+    clear
+}
+TD(){
+    d=$("tty")
+    echo "dashboard threads -output $d" >> lange.txt
+    clear
+}
+TE(){
+    e=$("tty")
+    echo "dashboard stack -output $e" >> lange.txt
+    clear
+}
+TF(){
+    f=$("tty")
+    echo "dashboard assembly -output $f" >> lange.txt
+    clear
+}
+export PAGER="most"
 # Have less display colours
 export LESS_TERMCAP_mb=$'\e[1;31m'     # begin bold
 export LESS_TERMCAP_md=$'\e[1;33m'     # begin blink
@@ -45,6 +105,11 @@ export LESS_TERMCAP_me=$'\e[0m'        # reset bold/blink
 export LESS_TERMCAP_se=$'\e[0m'        # reset reverse video
 export LESS_TERMCAP_ue=$'\e[0m'        # reset underline
 export GROFF_NO_SGR=1                  # for konsole and gnome-terminal
-
 export MANPAGER='less -s -M +Gg'
+
+alias ggg='g++ -g'
+alias gg='gcc -g'
+
+# core dump error detect
+ulimit -c unlimited
 
